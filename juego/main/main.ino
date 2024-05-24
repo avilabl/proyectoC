@@ -1,11 +1,15 @@
-#include <Teclado.h>
 #include <Arduino.h>
-//#include <stdio.h>
-//#include <avr/io.h>
 #include <util/delay.h>
+
 #include <Adafruit_GFX.h> 
 #include <Adafruit_SSD1306.h>
 
+#include <Teclado.h>
+
+#include <gameTRex.h>
+//#include <gameSnake.h>
+#include <gameGuy.h>
+#include <scores.h>
 
 
 const unsigned char PROGMEM logo [] = {
@@ -138,6 +142,212 @@ void Menu(int op) {
   display.display();
 }
 
+void gameSnake(){
+
+  display.clearDisplay();
+  char snake[50][2];  //el primer arreglo es cada pixel de la viborita
+                        //el segundo arreglo es: elemento 0=valor de eje X // elemento 1=valor de eje Y
+  char largo=7;  //largo del cuerpo viborita
+  char direccion=1; //direccion=1-derecha//2-abajo//3-izquierda//4-arriba 
+  int score=12345;
+  char pixelAUX[2];
+  int sentido=0;
+  
+  //posicion inicial viborita
+  for(int i=0;i<7;i++){
+    snake[i][0]=24-(i*2);
+    snake[i][1]=40;
+  }
+  //dibuja borde
+  display.drawRect(0,0,128,64,WHITE);
+  display.setTextSize(1);             // Draw 2X-scale text
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(7,4);
+  display.println("SCORE");
+  display.setCursor(92,4);
+  display.println(score);
+  display.drawLine(0, 14, 127, 14,WHITE);
+
+  //bucle para que camine la viborita
+  while(true){
+  //switch para redibujar la viborita segun la direccion
+  switch(direccion){
+    //redibuja si se mueve hacia la derecha
+    case(1):{
+      for(int i=largo;i>0;i--){
+        snake[i][0]=snake[i-1][0];
+        snake[i][1]=snake[i-1][1];
+      }
+      if(snake[0][0]==126){
+        snake[0][0]=2;
+        snake[0][1]=snake[1][1];
+      }else{
+        snake[0][0]=snake[1][0]+2;
+        snake[0][1]=snake[1][1];
+      }
+      for(int i=0;i<largo;i++){
+        display.drawPixel(snake[i][0],snake[i][1],WHITE);
+        display.drawPixel(snake[i][0],snake[i][1]+1,WHITE);
+        display.drawPixel(((snake[i][0])-1),(snake[i][1]),WHITE);
+        display.drawPixel(((snake[i][0])-1),(snake[i][1]+1),WHITE);
+      }
+      if(snake[largo-1][0]==2){
+        display.drawPixel(125,snake[largo-1][1],BLACK);
+        display.drawPixel(126,snake[largo-1][1],BLACK);
+        display.drawPixel(125,((snake[largo-1][1])+1),BLACK);
+        display.drawPixel(126,((snake[largo-1][1])+1),BLACK);
+      }else{
+        display.drawPixel(((snake[largo-1][0])-2),snake[largo-1][1],BLACK);
+        display.drawPixel(((snake[largo-1][0])-3),snake[largo-1][1],BLACK);
+        display.drawPixel(((snake[largo-1][0])-2),((snake[largo-1][1])+1),BLACK);
+        display.drawPixel(((snake[largo-1][0])-3),((snake[largo-1][1])+1),BLACK);
+      }
+      break;
+    }
+    case(2):{
+      for(int i=largo;i>0;i--){
+        snake[i][0]=snake[i-1][0];
+        snake[i][1]=snake[i-1][1];
+      }
+      if(snake[0][0]==62){
+        snake[0][0]=snake[1][0];
+        snake[0][1]=16;
+      }else{
+        snake[0][1]=snake[1][1]+2;
+        snake[0][0]=snake[1][0];
+      }
+      for(int i=0;i<largo;i++){
+        display.drawPixel(snake[i][0],snake[i][1],WHITE);
+        display.drawPixel(snake[i][0],snake[i][1]+1,WHITE);
+        display.drawPixel(((snake[i][0])-1),(snake[i][1]),WHITE);
+        display.drawPixel(((snake[i][0])-1),(snake[i][1]+1),WHITE);
+      }
+      if(snake[largo-1][0]==64){
+        display.drawPixel(15,snake[largo-1][1],BLACK);
+        display.drawPixel(16,snake[largo-1][1],BLACK);
+        display.drawPixel(15,((snake[largo-1][1])+1),BLACK);
+        display.drawPixel(16,((snake[largo-1][1])+1),BLACK);
+      }else{
+        display.drawPixel(((snake[largo-1][0])-2),snake[largo-1][1],BLACK);
+        display.drawPixel(((snake[largo-1][0])-3),snake[largo-1][1],BLACK);
+        display.drawPixel(((snake[largo-1][0])-2),((snake[largo-1][1])+1),BLACK);
+        display.drawPixel(((snake[largo-1][0])-3),((snake[largo-1][1])+1),BLACK);
+      }
+      break;
+    }
+    case(3):{
+      for(int i=largo;i>0;i--){
+        snake[i][0]=snake[i-1][0];
+        snake[i][1]=snake[i-1][1];
+      }
+      if(snake[0][0]==0){
+        snake[0][1]=snake[1][1];
+        snake[0][0]=126;
+      }else{
+        snake[0][0]=snake[1][0]-2;
+        snake[0][1]=snake[1][1];
+      }
+      for(int i=0;i<largo;i++){
+        display.drawPixel(snake[i][0],snake[i][1],WHITE);
+        display.drawPixel(snake[i][0],snake[i][1]+1,WHITE);
+        display.drawPixel(((snake[i][0])+1),(snake[i][1]),WHITE);
+        display.drawPixel(((snake[i][0])+1),(snake[i][1]+1),WHITE);
+      }
+      if(snake[largo-1][0]==126){
+        display.drawPixel(125,snake[largo-1][1],BLACK);
+        display.drawPixel(126,snake[largo-1][1],BLACK);
+        display.drawPixel(125,((snake[largo-1][1])+1),BLACK);
+        display.drawPixel(126,((snake[largo-1][1])+1),BLACK);
+      }else{
+        display.drawPixel(((snake[largo-1][0])-2),snake[largo-1][1],BLACK);
+        display.drawPixel(((snake[largo-1][0])-3),snake[largo-1][1],BLACK);
+        display.drawPixel(((snake[largo-1][0])-2),((snake[largo-1][1])+1),BLACK);
+        display.drawPixel(((snake[largo-1][0])-3),((snake[largo-1][1])+1),BLACK);
+      }
+      break;
+    }
+    case(4):{
+      for(int i=largo;i>0;i--){
+        snake[i][0]=snake[i-1][0];
+        snake[i][1]=snake[i-1][1];
+      }
+      if(snake[0][0]==14){
+        snake[0][0]=snake[1][0];
+        snake[0][1]=64;
+      }else{
+        snake[0][1]=snake[1][1]-2;
+        snake[0][0]=snake[1][0];
+      }
+      for(int i=0;i<largo;i++){
+        display.drawPixel(snake[i][0],snake[i][1],WHITE);
+        display.drawPixel(snake[i][0],snake[i][1]+1,WHITE);
+        display.drawPixel(((snake[i][0])-1),(snake[i][1]),WHITE);
+        display.drawPixel(((snake[i][0])-1),(snake[i][1]+1),WHITE);
+      }
+      if(snake[largo-1][0]==14){
+        display.drawPixel(62,snake[largo-1][1],BLACK);
+        display.drawPixel(63,snake[largo-1][1],BLACK);
+        display.drawPixel(62,((snake[largo-1][1])+1),BLACK);
+        display.drawPixel(63,((snake[largo-1][1])+1),BLACK);
+      }else{
+        display.drawPixel(((snake[largo-1][0])-2),snake[largo-1][1],BLACK);
+        display.drawPixel(((snake[largo-1][0])-3),snake[largo-1][1],BLACK);
+        display.drawPixel(((snake[largo-1][0])-2),((snake[largo-1][1])+1),BLACK);
+        display.drawPixel(((snake[largo-1][0])-3),((snake[largo-1][1])+1),BLACK);
+      }
+      break;
+    }
+    default:{
+      direccion=1;
+    }
+
+  }
+  if(sentido==0){
+    sentido=Teclado();
+  }
+  switch(sentido){
+    case 1:{
+      sentido=0;
+      break;
+    }
+    case 2:{
+      if((direccion==1)||(direccion==3)){
+        direccion=4;
+      }
+      sentido=0;
+      break;
+    }
+    case 3:{
+      if((direccion==2)||(direccion==4)){
+        direccion=1;
+      }
+      sentido=0;
+      break;
+    }
+    case 4:{
+      if((direccion==1)||(direccion==3)){
+        direccion=2;
+      }
+      sentido=0;
+      break;
+    }
+    case 5:{
+      if((direccion==2)||(direccion==4)){
+        direccion=3;
+      }
+      sentido=0;
+      break;
+    }
+    default:{
+      sentido=0;
+    }
+  }
+    _delay_ms(50);
+  display.display();
+  }
+  }
+
+
 
 void setup(){
   
@@ -159,33 +369,56 @@ void setup(){
 void loop(){
   
   int menu,Tecla=0;
-  char Op=1,Boton=0;
+  char op=1,Boton=0;
 
   while(true){
-      Menu(Op);
+      Menu(op);
       if(Tecla==0){
         Tecla=Teclado();
       }
       switch(Tecla){
         case 1:{
           Tecla=0;
+
+          switch(op){
+            case 1:{
+              gameTRex();
+              op=1;
+              break;
+            }
+            case 2:{
+              gameSnake();
+              op=1;
+              break;
+            }
+            case 3:{
+              gameGuy();
+              op=1;
+              break;
+            }
+            case 4:{
+              scores();
+              op=1;
+              break;
+            }
+          }
           break;
         }
         case 2:{
           Tecla=0;
-          if(Op==1){
-            Op=4;
+          if(op==1){
+            op=4;
           }else{
-            Op--;
+            op--;
           }
           break;
         }
         case 4:{
           Tecla=0;
-          if(Op==4){
-            Op=1;
+          if(op==4){
+            op=1;
           }else{
-          Op++;
+          op++;
           }
         break;
         }

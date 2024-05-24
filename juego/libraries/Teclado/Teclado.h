@@ -20,23 +20,23 @@ int tecla;
       tecla=PINB;
 
       switch (tecla){
-        case B00011110:{
+        case B00011110:{//enter
           boton=1;
           break;
         }
-        case B00011101:{
+        case B00011101:{//arriba
         boton=2;
           break;
         }
-        case B00011011:{
+        case B00011011:{//derecho
           boton=3;
           break;
         }
-        case B00010111:{
+        case B00010111:{//abajo
           boton=4;
           break;
         }
-        case B00001111:{
+        case B00001111:{//izquierda
          boton=5;
           break;
         }
