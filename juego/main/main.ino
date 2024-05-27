@@ -149,9 +149,11 @@ void gameSnake(){
                         //el segundo arreglo es: elemento 0=valor de eje X // elemento 1=valor de eje Y
   char largo=7;  //largo del cuerpo viborita
   char direccion=1; //direccion=1-derecha//2-abajo//3-izquierda//4-arriba 
-  int score=12345;
+  int score=0;
   char pixelAUX[2];
-  int sentido=0;
+  char sentido=0;
+  char food[2]={0,0};
+  char genFood=0;
   
   //posicion inicial viborita
   for(int i=0;i<7;i++){
@@ -178,6 +180,11 @@ void gameSnake(){
         snake[i][0]=snake[i-1][0];
         snake[i][1]=snake[i-1][1];
       }
+      display.drawPixel(snake[largo][0],snake[largo][1],BLACK);
+      display.drawPixel(snake[largo][0]-1,snake[largo][1],BLACK);
+      display.drawPixel(snake[largo][0],((snake[largo][1])+1),BLACK);
+      display.drawPixel(snake[largo][0]-1,((snake[largo][1])+1),BLACK);
+
       if(snake[0][0]==126){
         snake[0][0]=2;
         snake[0][1]=snake[1][1];
@@ -191,17 +198,6 @@ void gameSnake(){
         display.drawPixel(((snake[i][0])-1),(snake[i][1]),WHITE);
         display.drawPixel(((snake[i][0])-1),(snake[i][1]+1),WHITE);
       }
-      if(snake[largo-1][0]==2){
-        display.drawPixel(125,snake[largo-1][1],BLACK);
-        display.drawPixel(126,snake[largo-1][1],BLACK);
-        display.drawPixel(125,((snake[largo-1][1])+1),BLACK);
-        display.drawPixel(126,((snake[largo-1][1])+1),BLACK);
-      }else{
-        display.drawPixel(((snake[largo-1][0])-2),snake[largo-1][1],BLACK);
-        display.drawPixel(((snake[largo-1][0])-3),snake[largo-1][1],BLACK);
-        display.drawPixel(((snake[largo-1][0])-2),((snake[largo-1][1])+1),BLACK);
-        display.drawPixel(((snake[largo-1][0])-3),((snake[largo-1][1])+1),BLACK);
-      }
       break;
     }
     case(2):{
@@ -209,7 +205,16 @@ void gameSnake(){
         snake[i][0]=snake[i-1][0];
         snake[i][1]=snake[i-1][1];
       }
-      if(snake[0][0]==62){
+      display.drawPixel(snake[largo][0],snake[largo][1],BLACK);
+      display.drawPixel(((snake[largo][0])-1),(snake[largo][1]),BLACK);
+      if(snake[largo][1]!=62){
+      display.drawPixel(snake[largo][0],snake[largo][1]+1,BLACK);
+      display.drawPixel(((snake[largo][0])-1),(snake[largo][1]+1),BLACK);
+     }else{
+      display.drawPixel(snake[largo][0],snake[largo][1]+1,WHITE);
+      display.drawPixel(((snake[largo][0])-1),(snake[largo][1]+1),WHITE);
+     }
+      if(snake[0][1]==62){
         snake[0][0]=snake[1][0];
         snake[0][1]=16;
       }else{
@@ -222,17 +227,6 @@ void gameSnake(){
         display.drawPixel(((snake[i][0])-1),(snake[i][1]),WHITE);
         display.drawPixel(((snake[i][0])-1),(snake[i][1]+1),WHITE);
       }
-      if(snake[largo-1][0]==64){
-        display.drawPixel(15,snake[largo-1][1],BLACK);
-        display.drawPixel(16,snake[largo-1][1],BLACK);
-        display.drawPixel(15,((snake[largo-1][1])+1),BLACK);
-        display.drawPixel(16,((snake[largo-1][1])+1),BLACK);
-      }else{
-        display.drawPixel(((snake[largo-1][0])-2),snake[largo-1][1],BLACK);
-        display.drawPixel(((snake[largo-1][0])-3),snake[largo-1][1],BLACK);
-        display.drawPixel(((snake[largo-1][0])-2),((snake[largo-1][1])+1),BLACK);
-        display.drawPixel(((snake[largo-1][0])-3),((snake[largo-1][1])+1),BLACK);
-      }
       break;
     }
     case(3):{
@@ -240,9 +234,14 @@ void gameSnake(){
         snake[i][0]=snake[i-1][0];
         snake[i][1]=snake[i-1][1];
       }
-      if(snake[0][0]==0){
-        snake[0][1]=snake[1][1];
+      display.drawPixel(snake[largo][0],snake[largo][1],BLACK);
+      display.drawPixel(snake[largo][0]-1,snake[largo][1],BLACK);
+      display.drawPixel(snake[largo][0],((snake[largo][1])+1),BLACK);
+      display.drawPixel(snake[largo][0]-1,((snake[largo][1])+1),BLACK);
+
+      if(snake[0][0]==2){
         snake[0][0]=126;
+        snake[0][1]=snake[1][1];
       }else{
         snake[0][0]=snake[1][0]-2;
         snake[0][1]=snake[1][1];
@@ -250,30 +249,27 @@ void gameSnake(){
       for(int i=0;i<largo;i++){
         display.drawPixel(snake[i][0],snake[i][1],WHITE);
         display.drawPixel(snake[i][0],snake[i][1]+1,WHITE);
-        display.drawPixel(((snake[i][0])+1),(snake[i][1]),WHITE);
-        display.drawPixel(((snake[i][0])+1),(snake[i][1]+1),WHITE);
-      }
-      if(snake[largo-1][0]==126){
-        display.drawPixel(125,snake[largo-1][1],BLACK);
-        display.drawPixel(126,snake[largo-1][1],BLACK);
-        display.drawPixel(125,((snake[largo-1][1])+1),BLACK);
-        display.drawPixel(126,((snake[largo-1][1])+1),BLACK);
-      }else{
-        display.drawPixel(((snake[largo-1][0])-2),snake[largo-1][1],BLACK);
-        display.drawPixel(((snake[largo-1][0])-3),snake[largo-1][1],BLACK);
-        display.drawPixel(((snake[largo-1][0])-2),((snake[largo-1][1])+1),BLACK);
-        display.drawPixel(((snake[largo-1][0])-3),((snake[largo-1][1])+1),BLACK);
+        display.drawPixel(((snake[i][0])-1),(snake[i][1]),WHITE);
+        display.drawPixel(((snake[i][0])-1),(snake[i][1]+1),WHITE);
       }
       break;
     }
+     
     case(4):{
       for(int i=largo;i>0;i--){
         snake[i][0]=snake[i-1][0];
         snake[i][1]=snake[i-1][1];
       }
-      if(snake[0][0]==14){
+      
+      display.drawPixel(snake[largo][0],snake[largo][1],BLACK);
+      display.drawPixel(((snake[largo][0])-1),(snake[largo][1]),BLACK);
+      if(snake[largo][1]!=62){
+      display.drawPixel(snake[largo][0],snake[largo][1]+1,BLACK);
+      display.drawPixel(((snake[largo][0])-1),(snake[largo][1]+1),BLACK);
+     }
+      if(snake[0][1]==16){
         snake[0][0]=snake[1][0];
-        snake[0][1]=64;
+        snake[0][1]=62;
       }else{
         snake[0][1]=snake[1][1]-2;
         snake[0][0]=snake[1][0];
@@ -283,17 +279,6 @@ void gameSnake(){
         display.drawPixel(snake[i][0],snake[i][1]+1,WHITE);
         display.drawPixel(((snake[i][0])-1),(snake[i][1]),WHITE);
         display.drawPixel(((snake[i][0])-1),(snake[i][1]+1),WHITE);
-      }
-      if(snake[largo-1][0]==14){
-        display.drawPixel(62,snake[largo-1][1],BLACK);
-        display.drawPixel(63,snake[largo-1][1],BLACK);
-        display.drawPixel(62,((snake[largo-1][1])+1),BLACK);
-        display.drawPixel(63,((snake[largo-1][1])+1),BLACK);
-      }else{
-        display.drawPixel(((snake[largo-1][0])-2),snake[largo-1][1],BLACK);
-        display.drawPixel(((snake[largo-1][0])-3),snake[largo-1][1],BLACK);
-        display.drawPixel(((snake[largo-1][0])-2),((snake[largo-1][1])+1),BLACK);
-        display.drawPixel(((snake[largo-1][0])-3),((snake[largo-1][1])+1),BLACK);
       }
       break;
     }
@@ -342,10 +327,34 @@ void gameSnake(){
       sentido=0;
     }
   }
+  while(genFood==0){
+    food[0] = (random(0,62))*2;
+    food[1] = (random(9,31))*2;
+    genFood=1;
+    for(char j=0;j<largo;j++){
+      if((snake[j][0]==food[0])||(snake[j][1]==food[1])){
+        genFood=0;
+        break;
+      }
+    }
+  }
+  display.drawPixel(food[0],food[1],WHITE);
+  display.drawPixel(food[0]-1,food[1],WHITE);
+  display.drawPixel(food[0],food[1]+1,WHITE);
+  display.drawPixel(food[0]-1,food[1]+1,WHITE);
+
+  if((snake[0][0]==food[0])&&(snake[0][1]==food[1])){
+    largo++;
+    genFood=0;
+    score=score+100;
+  }
+
+
     _delay_ms(50);
   display.display();
+  
   }
-  }
+}
 
 
 
@@ -359,6 +368,8 @@ void setup(){
   pinMode(Abajo,INPUT);
   pinMode(Izquierda,INPUT);
   
+  randomSeed(analogRead(A0)); 
+
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   display.clearDisplay();
   display.drawBitmap(0,0,logo,128,64,1);
