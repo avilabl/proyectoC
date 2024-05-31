@@ -15,8 +15,8 @@ int boton=0;
 int tecla;
 	tecla=PINB;
     
-    if(tecla=B00011111){
-      _delay_ms(5);
+    if(tecla!=B11111){
+      _delay_ms(2);
       tecla=PINB;
 
       switch (tecla){
